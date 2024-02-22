@@ -26,9 +26,12 @@ import zipfile
 import json
 import os
 
-__all__ = ["install_forge_version", "run_forge_installer", "list_forge_versions", "find_forge_version", "is_forge_version_valid", "supports_automatic_install", "forge_to_installed_version"]
+__all__ = ["install_forge_version", "run_forge_installer", "list_forge_versions", "find_forge_version", "is_forge_version_valid", "supports_automatic_install", "forge_to_installed_version", "installer_forge"]
 
 def installer_forge(minecraft_dir: str, ver: str):
+    """
+    Run forge installer, use when version is not supported
+    """
     forge_vers = requests.get("https://mrnavastar.github.io/ForgeVersionAPI/forge-versions.json").json()
     ver = forge_vers[ver][0]['url']
     jar_file = requests.get(ver).content
