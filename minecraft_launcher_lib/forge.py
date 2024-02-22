@@ -17,6 +17,7 @@ from .install import install_minecraft_version, install_libraries
 from ._internal_types.forge_types import ForgeInstallProfile
 from typing import List, Union, Optional
 from .exceptions import VersionNotFound
+import requests
 from .types import CallbackDict
 import subprocess
 import tempfile
@@ -27,6 +28,14 @@ import os
 
 __all__ = ["install_forge_version", "run_forge_installer", "list_forge_versions", "find_forge_version", "is_forge_version_valid", "supports_automatic_install", "forge_to_installed_version"]
 
+def installer_forge(minecraft_dir: str, ver: str):
+    forge_vers = requests.get("https://mrnavastar.github.io/ForgeVersionAPI/forge-versions.json").json()
+    ver = forge_vers[ver][0]['url']
+    jar_file = requests.get(ver).content
+    with open(f'{os.path.join(minecraft_dir, ver.split("/")[-1]}', 'wb') as file:
+        file.write(jar_file)
+    print('Running installer jar')
+    os.system(f"java -jar [os.path.join(minecraft_dir, ver.split("/")[-1]}")
 
 def get_data_library_path(libname: str, path: str) -> str:
     """
